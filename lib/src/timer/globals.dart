@@ -1,3 +1,6 @@
 library globals;
 
-int globalCounter = 0;
+int focusTime = 25;
+int shortBreakTime = 5;
+int longBreakTime =  15;
+int cycles = 4;

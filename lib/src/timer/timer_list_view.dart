@@ -8,7 +8,7 @@ import 'timer_details_view.dart';
 class TimerListView extends StatelessWidget {
   const TimerListView({
     super.key,
-    this.items = const [Timer(1)],
+    this.items = const [Timer("Pomodoro"), Timer("Flowtime")],
   });
 
   static const routeName = '/';
@@ -55,7 +55,7 @@ class TimerListView extends StatelessWidget {
                 fontSize: 20),
                 // fontFamily: 'Helvetica',
                 // fontWeight: FontWeight.bold),
-              'Timer ${item.id}'),
+              '${item.name} Timer'),
             leading: const CircleAvatar(
               // Display the Flutter Logo image asset.
               foregroundImage: AssetImage('assets/images/icons8-timer-64.png'),

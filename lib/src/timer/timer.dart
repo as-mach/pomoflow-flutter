@@ -1,6 +1,6 @@
 /// A placeholder class that represents an entity or model.
 class Timer {
-  const Timer(this.id);
+  const Timer(this.name);
 
-  final int id;
+  final String name;
 }

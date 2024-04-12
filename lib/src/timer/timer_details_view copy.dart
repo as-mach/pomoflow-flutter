@@ -110,7 +110,7 @@ class _TimerDetailsViewState extends State<TimerDetailsView> {
 
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countDown,
-    presetMillisecond: StopWatchTimer.getMilliSecFromSecond(25),
+    presetMillisecond: StopWatchTimer.getMilliSecFromSecond(5),
     onStopped: () {
       print('onStopped');
     },
@@ -148,63 +148,30 @@ class _TimerDetailsViewState extends State<TimerDetailsView> {
                   ),  
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  /// Display every minute.
-                  StreamBuilder<int>(
-                    stream: _stopWatchTimer.minuteTime,
-                    initialData: _stopWatchTimer.minuteTime.value,
-                    builder: (context, snap) {
-                      final value = snap.data;
-                      print('Listen every minute. $value');
-                      return Row(
-                        children: <Widget>[
-                          Text(
-                            value.toString().padLeft(2, '0'),
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 100,
-                                fontFamily: 'Helvetica',
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                  /// Display every second.
-                  StreamBuilder<int>(
-                    stream: _stopWatchTimer.secondTime,
-                    initialData: _stopWatchTimer.secondTime.value,
-                    builder: (context, snap) {
-                      final value = snap.data;
-                      print('Listen every second. $value');
-                      if (value == 0){
-                        _stopWatchTimer.setPresetSecondTime(25);
-                        // change to short break time put counter right here, once counter hits 4, change to long break instead.
-                      }
-                      return Column(
-                        children: <Widget>[
-                          Padding(
-                              padding: const EdgeInsets.all(0),
-                              child: 
-                                Text(
-                                    ':${value.toString().padLeft(2, '0')}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 100,
-                                      fontFamily: 'Helvetica',
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+            StreamBuilder<int>(
+              stream: _stopWatchTimer.rawTime,
+              initialData: _stopWatchTimer.rawTime.value,
+              builder: (context, snap) {
+                final value = snap.data!;
+                final displayTime =
+                    StopWatchTimer.getDisplayTime(value, hours: _isHours);
+                return Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        displayTime,
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 40,
+                            fontFamily: 'Helvetica',
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ],
-                ),
+                );
+              },
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -238,7 +205,6 @@ class _TimerDetailsViewState extends State<TimerDetailsView> {
                     child: MaterialButton(
                     color: Color.fromARGB(255, 88, 22, 168),
                     onPressed: () {
-                      _stopWatchTimer.setPresetSecondTime(0);
                       },
                     child: Text(
                       skip,
@@ -266,8 +232,8 @@ class _TimerDetailsViewState extends State<TimerDetailsView> {
               ],
             ),  
           ],
+        ),
       ),
-    )
     );
   }
 }
