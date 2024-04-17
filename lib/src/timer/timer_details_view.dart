@@ -106,13 +106,15 @@ class _TimerDetailsViewState extends State<TimerDetailsView> {
   String skip = "Skip";
   String restart = "Restart";
   String currentState = "focus";
+  int cycles = 0;
+  int counter = 1;
+  bool currentBreak = false;
 
 
   final StopWatchTimer _stopWatchTimer = StopWatchTimer(
     mode: StopWatchMode.countDown,
-    presetMillisecond: StopWatchTimer.getMilliSecFromSecond(25),
+    presetMillisecond: StopWatchTimer.getMilliSecFromSecond(10),
     onStopped: () {
-      print('onStopped');
     },
     onEnded: () {
     },
@@ -181,8 +183,21 @@ class _TimerDetailsViewState extends State<TimerDetailsView> {
                       final value = snap.data;
                       print('Listen every second. $value');
                       if (value == 0){
-                        _stopWatchTimer.setPresetSecondTime(25);
-                        // change to short break time put counter right here, once counter hits 4, change to long break instead.
+                        print('Pomos Completed: $counter');
+                        if (counter < 4 && currentBreak){
+                          _stopWatchTimer.setPresetSecondTime(10);
+                          counter++;
+                          currentBreak = false;
+                        }
+                        else if (counter < 4 && !currentBreak){
+                          _stopWatchTimer.setPresetSecondTime(5);
+                          currentBreak = true;
+                        }
+                        else{
+                          _stopWatchTimer.setPresetSecondTime(15);
+                          counter = 0;
+                          currentBreak = true;
+                        }
                       }
                       return Column(
                         children: <Widget>[
@@ -238,6 +253,7 @@ class _TimerDetailsViewState extends State<TimerDetailsView> {
                     child: MaterialButton(
                     color: Color.fromARGB(255, 88, 22, 168),
                     onPressed: () {
+                      _stopWatchTimer.onStopTimer();
                       _stopWatchTimer.setPresetSecondTime(0);
                       },
                     child: Text(
