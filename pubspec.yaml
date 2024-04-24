@@ -10,6 +10,7 @@ environment:
   sdk: '>=3.2.6 <4.0.0'
 
 dependencies:
+  alarmplayer: ^1.1.1
   circular_countdown_timer: ^0.2.3
   flutter:
     sdk: flutter

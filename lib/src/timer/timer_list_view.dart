@@ -8,7 +8,7 @@ import 'timer_details_view.dart';
 class TimerListView extends StatelessWidget {
   const TimerListView({
     super.key,
-    this.items = const [Timer("Pomodoro"), Timer("Flowtime")],
+    this.items = const [Timer("Pomodoro")],
   });
 
   static const routeName = '/';
