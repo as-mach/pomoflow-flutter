@@ -44,14 +44,14 @@ class _ElevatedButtonExampleState extends State<ElevatedButtonExample> {
   }
 }
 
-class TimerDetailsView extends StatefulWidget {
+class PomoDetailsView extends StatefulWidget {
   @override
-  static const routeName = '/sample_item';
-  TimerDetailsView({super.key});
-  _TimerDetailsViewState createState() => _TimerDetailsViewState();
+  static const routeName = '/pomotimer';
+  PomoDetailsView({super.key});
+  _PomoDetailsViewState createState() => _PomoDetailsViewState();
 }
 
-class _TimerDetailsViewState extends State<TimerDetailsView> {
+class _PomoDetailsViewState extends State<PomoDetailsView> {
 
   String startStop = "Start";
   String skip = "Skip";

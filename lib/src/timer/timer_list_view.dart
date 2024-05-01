@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_application_1/src/timer/timer.dart';
 import '../settings/settings_view.dart';
-import 'timer.dart';
-import 'timer_details_view.dart';
+import 'pomotimer_details.dart'; // Importing the Pomodoro timer details view
+import 'flowtimer_details.dart'; // Importing the Flowtime timer details view
 
-/// Displays a list of Timers.
 class TimerListView extends StatelessWidget {
   const TimerListView({
-    super.key,
-    this.items = const [Timer("Pomodoro")],
-  });
+    Key? key,
+    this.items = const [
+      Timer("Pomodoro"),
+      Timer("Flowtime"), // Adding a Flowtime timer
+    ],
+  }) : super(key: key);
 
   static const routeName = '/';
 
@@ -19,58 +21,65 @@ class TimerListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Your Timers'),
+        title: const Text('Choose A Mode',
+          style: TextStyle(color: Colors.white),
+        ),
+        centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              // Navigate to the settings page. If the user leaves and returns
-              // to the app after it has been killed while running in the
-              // background, the navigation stack is restored.
-              Navigator.restorablePushNamed(context, SettingsView.routeName);
-            },
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.settings),
+          //   onPressed: () {
+          //     Navigator.restorablePushNamed(context, SettingsView.routeName);
+          //   },
+          // ),
         ],
       ),
-
-      // To work with lists that may contain a large number of items, it’s best
-      // to use the ListView.builder constructor.
-      //
-      // In contrast to the default ListView constructor, which requires
-      // building all Widgets up front, the ListView.builder constructor lazily
-      // builds Widgets as they’re scrolled into view.
-      body: ListView.builder(
-        // Providing a restorationId allows the ListView to restore the
-        // scroll position when a user leaves and returns to the app after it
-        // has been killed while running in the background.
-        restorationId: 'TimerListView',
-        itemCount: items.length,
-        itemBuilder: (BuildContext context, int index) {
-          final item = items[index];
-          
-          return ListTile(
-            title: Text(
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 20),
-                // fontFamily: 'Helvetica',
-                // fontWeight: FontWeight.bold),
-              '${item.name} Timer'),
-            leading: const CircleAvatar(
-              // Display the Flutter Logo image asset.
-              foregroundImage: AssetImage('assets/images/icons8-timer-64.png'),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            child: ListView.builder(
+              padding: EdgeInsets.only(top: 200),
+              itemCount: items.length,
+              itemBuilder: (BuildContext context, int index) {
+                final item = items[index];
+                return GestureDetector(
+                  onTap: () {
+                    if (item.name == 'Pomodoro') {
+                      Navigator.restorablePushNamed(
+                        context,
+                        PomoDetailsView.routeName,
+                      );
+                    } else if (item.name == 'Flowtime') {
+                      Navigator.restorablePushNamed(
+                        context,
+                        FlowDetailsView.routeName,
+                      );
+                    }
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(top: 16, left: 16, right: 16),
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(255, 88, 22, 168),
+                      borderRadius: BorderRadius.circular(24.0),
+                    ),
+                    child: Text(
+                      '${item.name} Timer',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                );
+              },
             ),
-            onTap: () {
-              // Navigate to the details page. If the user leaves and returns to
-              // the app after it has been killed while running in the
-              // background, the navigation stack is restored.
-              Navigator.restorablePushNamed(
-                context,
-                TimerDetailsView.routeName,
-              );
-            }
-          );
-        },
+          ),
+        ],
       ),
     );
   }
